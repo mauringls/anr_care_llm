@@ -4,14 +4,9 @@ from transformers import pipeline, AutoModelForCausalLM, Mistral3ForConditionalG
 
 random.seed(13)
 
-MAX_SERIES = 10
+MAX_SERIES = 2
 
-qwen = "Qwen/Qwen2.5-7B-Instruct"
-mistral = "mistralai/Mistral-7B-Instruct-v0.3"
-llama = "meta-llama/Llama-3.1-8B-Instruct"
-
-models = [qwen, mistral, llama]
-models_names = ["qwen", "mistral", "llama"]
+models = ["qwen", "mistral", "llama"]
 
 exps = ["out_sexes", "in_sexes", "in_chicken"]
 
@@ -21,13 +16,32 @@ opponent_modes = ["hum", "llm"]
 
 out_observer_modes = ["hum_hum", "hum_llm"]
 
-def load_model(model=""):
-    llm = pipeline(
-        task="text-generation",
-        model="mistralai/Ministral-3-3B-Instruct-2512",
-        torch_dtype="auto",
-        device_map="auto",
-    )
+def load_model(model="test"):
+
+    if model == "test":
+        llm = pipeline(
+            task="text-generation",
+            model="mistralai/Ministral-3-3B-Instruct-2512",
+            torch_dtype="auto",
+            device_map="auto",
+        )
+    
+    if model == "llama":
+       llm = pipeline(
+            "text-generation",
+            model="meta-llama/Llama-3.1-8B-Instruct",
+            model_kwargs={"torch_dtype": torch.bfloat16},
+            device_map="auto",
+        )
+    
+    if model == "qwen":
+        llm = pipeline(
+            task="text-generation",
+            model="Qwen/Qwen2.5-7B-Instruct",
+            device_map="auto",
+            torch_dtype="auto",
+        )
+
     return llm
 
 def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
@@ -57,7 +71,7 @@ def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
     ]
 
     for fs in [fs1,fs2]:
-        messages.append([
+        messages.extend([
             {
                 "role":"user",
                 "content":fs[0]
@@ -86,9 +100,10 @@ def load_series(exp):
     with open(f"instructions/series/{exp}_series.txt", 'r') as f:
             lines = f.readlines()
 
+    random.shuffle(lines)
     series = []
 
-    for line in random.shuffle(lines):
+    for line in lines:
         series.append(line.strip("\n").split(" % "))
 
     return series
@@ -143,17 +158,19 @@ def message_list_to_file(messages, file_name):
 
 def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
 
+    llm = load_model(model)
     messages = init_messages(exp, opponent_mode, "", few_shot_mode)
     series = load_series(exp)
 
     for serie in series[:MAX_SERIES]:
-        messages.append([
+        messages.append(
             {
                 "role":"user",
                 "content":f"Your opponent's history is: {serie[0]}. What do you want to play?"
             }
-        ])
+        )
 
+        print(messages)
         result = llm(
             messages,
             max_new_tokens=100,
@@ -161,7 +178,7 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.extend([
             {
                 "role":"assistant",
                 "content":answer
@@ -178,7 +195,7 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.extend([
             {
                 "role":"assistant",
                 "content":answer
@@ -195,27 +212,28 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.append(
             {
                 "role":"assistant",
                 "content":answer
             }
-        ])
+        )
     
     message_list_to_file(messages, f"results/{exp}_{opponent_mode}_{few_shot_mode}_{model}.txt")
 
 def do_experiment_out(model, exp, out_observer_mode):
 
+    llm = load_model(model)
     messages = init_messages(exp, "", out_observer_mode, "")
     series = load_series(exp)
 
     for serie in series[:MAX_SERIES]:
-        messages.append([
+        messages.append(
             {
                 "role":"user",
                 "content":f"Player 1's history is: {serie[0]}. Player 2's history is: {serie[1]}. What do you think they will play, respectively?"
             }
-        ])
+        )
 
         result = llm(
             messages,
@@ -224,7 +242,7 @@ def do_experiment_out(model, exp, out_observer_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.extend([
             {
                 "role":"assistant",
                 "content":answer
@@ -241,7 +259,7 @@ def do_experiment_out(model, exp, out_observer_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.extend([
             {
                 "role":"assistant",
                 "content":answer
@@ -258,12 +276,12 @@ def do_experiment_out(model, exp, out_observer_mode):
         )
         answer = result[0]["generated_text"][-1]["content"]
 
-        messages.append([
+        messages.append(
             {
                 "role":"assistant",
                 "content":answer
             }
-        ])
+        )
     
     message_list_to_file(messages, f"results/{exp}_{out_observer_mode}_{model}.txt")
 
@@ -271,23 +289,8 @@ def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode):
     if exp=="out_sexes":
         do_experiment_out(model, exp, out_observer_mode)
     else:
-        do_experiment_in(model, exp, out_observer_mode)
+        do_experiment_in(model, exp, opponent_mode, few_shot_mode)
 
 
 if __name__ == "__main__":
-    messages = [
-        {
-            "role": "user",
-            "content": "Write a Python code sample to print Hello World"
-        }
-    ]
-
-    llm = load_model()
-
-    result = llm(
-        messages,
-        max_new_tokens=100,
-        do_sample=False,
-    )
-
-    print(result[0]["generated_text"][-1]["content"])
+    do_experiment("qwen","in_chicken","hum","hum_hum","self")
