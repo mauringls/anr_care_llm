@@ -1,5 +1,10 @@
+import random
 import torch
 from transformers import pipeline, AutoModelForCausalLM, Mistral3ForConditionalGeneration, FineGrainedFP8Config
+
+random.seed(13)
+
+MAX_SERIES = 10
 
 qwen = "Qwen/Qwen2.5-7B-Instruct"
 mistral = "mistralai/Mistral-7B-Instruct-v0.3"
@@ -89,21 +94,110 @@ def load_series(exp):
 
     series = []
 
-    for line in lines:
+    for line in random.shuffle(lines):
         series.append(line.strip("\n").split(" % "))
 
     return series
 
+def in_exp_result_message(exp,ans,res):
+    if exp == "in_sexes":
+        if ans == "C":
+            if res == "S":
+                message = "Your opponent played C. They earn 10 points and you earn 7."
+            else:
+                message = "Your opponent played D. You earn 10 points and they earn 7."
+        else:
+            if res == "S":
+                message = "Your opponent played D. None of you earns any point."
+            else:
+                message = "Your opponent played C. None of you earns any point."
+    else:
+        if ans == "F":
+            if res == "S":
+                message = "Your opponent chose to go forwards. None of you earns any point."
+            else:
+                message = "Your opponent chose to go backwards. You earn 40 points and they earn 10."
+        else:
+            if res == "S":
+                message = "Your opponent chose to go backards. You earn 20 points each."
+            else:
+                message = "Your opponent chose to go forwards. They earn 40 points and you earn 10."
+
+def message_list_to_file(messages, file_name):
+    f = open(file_name, 'w')
+    role_translation = {"system":"INSTRUCTIONS:", "user":">", "assistant":"LLM:"}
+
+    for message in messages:
+        f.write(f"{role_translation[message["role"]]} {message["content"]}\n\n")
+
+    f.close()
 
 def do_experiment_in(
     model="llama",
     exp="out_sexes",
     opponent_mode="hum",
-    out_observer_mode="hum_hum",
     few_shot_mode="neutral"):
 
-    messages = init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode,)
+    messages = init_messages(exp, opponent_mode, "", few_shot_mode,)
     series = load_series(exp)
+
+    for serie in series[:MAX_SERIES]:
+        messages.append([
+            {
+                "role":"user",
+                "content":f"Your opponent's history is: {serie[0]}. What do you want to play?"
+            }
+        ])
+
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            },{
+                "role":"user",
+                "content":f"{in_exp_result_message(exp,answer,serie[1])} On a scale of 0 (you) to 10 (your opponent), who would you hold responsible for this result?"
+            }
+        ])
+
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            },{
+                "role":"user",
+                "content":f"On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your opponent's move?"
+            }
+        ])
+
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            }
+        ])
+    
+    message_list_to_file(messages, f"results/{exp}_{opponent_mode}_{few_shot_mode}_{model}.txt")
 
 
 
