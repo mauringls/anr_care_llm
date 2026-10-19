@@ -122,6 +122,21 @@ def in_exp_result_message(exp,ans,res):
                 message = "Your opponent chose to go backards. You earn 20 points each."
             else:
                 message = "Your opponent chose to go forwards. They earn 40 points and you earn 10."
+    return message
+
+
+def out_exp_result_message(p1,p2):
+    if p1 == "C":
+        if p2 == "C":
+            message = "Player 1 and Player 2 both played C. Player 2 earns 10 points and Player 1 earns 7."
+        else:
+            message = "Player 1 played C and Player 2 played D. None of them earns any point."
+    else:
+        if p2 == "C":
+            message = "Player 1 played D and Player 2 played C. None of them earns any point."
+        else:
+            message = "Player 1 and Player 2 both played D. Player 1 earns 10 points and Player 2 earns 7."
+    return message
 
 def message_list_to_file(messages, file_name):
     f = open(file_name, 'w')
@@ -132,13 +147,9 @@ def message_list_to_file(messages, file_name):
 
     f.close()
 
-def do_experiment_in(
-    model="llama",
-    exp="out_sexes",
-    opponent_mode="hum",
-    few_shot_mode="neutral"):
+def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
 
-    messages = init_messages(exp, opponent_mode, "", few_shot_mode,)
+    messages = init_messages(exp, opponent_mode, "", few_shot_mode)
     series = load_series(exp)
 
     for serie in series[:MAX_SERIES]:
@@ -199,9 +210,74 @@ def do_experiment_in(
     
     message_list_to_file(messages, f"results/{exp}_{opponent_mode}_{few_shot_mode}_{model}.txt")
 
+def do_experiment_out(model, exp, out_observer_mode):
 
+    messages = init_messages(exp, "", out_observer_mode, "")
+    series = load_series(exp)
 
+    for serie in series[:MAX_SERIES]:
+        messages.append([
+            {
+                "role":"user",
+                "content":f"Player 1's history is: {serie[0]}. Player 2's history is: {serie[1]}. What do you think they will play, respectively?"
+            }
+        ])
 
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            },{
+                "role":"user",
+                "content":f"{out_exp_result_message(serie[2],serie[3])} On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?"
+            }
+        ])
+
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            },{
+                "role":"user",
+                "content":f"On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?"
+            }
+        ])
+
+        result = llm(
+            messages,
+            max_new_tokens=100,
+            do_sample=False,
+        )
+        answer = result[0]["generated_text"][-1]["content"]
+
+        messages.append([
+            {
+                "role":"assistant",
+                "content":answer
+            }
+        ])
+    
+    message_list_to_file(messages, f"results/{exp}_{out_observer_mode}_{model}.txt")
+
+def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode):
+    if exp=="out_sexes":
+        do_experiment_out(model, exp, out_observer_mode)
+    else:
+        do_experiment_in(model, exp, out_observer_mode)
 
 
 if __name__ == "__main__":
