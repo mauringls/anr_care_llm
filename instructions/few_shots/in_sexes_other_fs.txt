@@ -1,1 +1,2 @@
-in_sexes_neutral_fs
+Your opponent's history is: D,D,C,C,D,D,D,C,D,D. What do you want to play? % C % Your opponent played D. None of you earns any point. On a scale of 0 (you) to 10 (your opponent), who would you hold responsible for this result? % 4 % On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your opponent's move? % 9
+Your opponent's history is: C,C,C,D,D,D,D,C,C,C. What do you want to play? % C % Your opponent played C. They earn 10 points and you earn 7. On a scale of 0 (you) to 10 (your opponent), who would you hold responsible for this result? % 4 % On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your opponent's move? % 4

@@ -1,0 +1,3 @@
+Your opponent's history is: B,F,B,F,F,B,B,B,B,F. What do you want to play? % F % Your opponent chose to go forward. None of you earns any point. On a scale of 0 (you) to 10 (your opponent), who would you hold responsible for this result? % 5 % On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your opponent's move? % 1
+Your opponent's history is: F,B,B,F,F,B,B,F,B,B. What do you want to play? % F % Your opponent chose to go backward. You earn 40 points and they earn 10. On a scale of 0 (you) to 10 (your opponent), who would you hold responsible for this result? % 3 % On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your opponent's move? % 7
+
