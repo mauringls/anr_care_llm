@@ -25,8 +25,63 @@ def load_model(model=""):
     )
     return llm
 
-def init_messages(exp, few_shot_mode, opponent_mode, out_observer_mode):
-    return []
+def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
+    with open("instructions/general_intructions.txt", 'r') as f:
+        general_instructions = f.read()
+
+    if exp == "out_sexes":
+        with open(f"instructions/exp_specific/{exp}_{out_observer_mode}_instruct.txt", 'r') as f:
+            exp_instructions = f.read()
+
+        with open(f"instructions/few_shots/{exp}_fs.txt",'r') as f:
+            lines = f.readlines()
+            fs1 = lines[0].split(" % ")
+            fs2 = lines[1].split(" % ")
+    
+    else:
+        with open(f"instructions/exp_specific/{exp}_{opponent_mode}_instruct.txt", 'r') as f:
+            exp_instructions = f.read()
+
+        with open(f"instructions/few_shots/{exp}_{few_shot_mode}_fs.txt",'r') as f:
+            lines = f.readlines()
+            fs1 = lines[0].split(" % ")
+            fs2 = lines[1].split(" % ")
+
+    messages = [
+        {
+            "role":"system",
+            "content":general_instructions
+        },{
+            "role":"system",
+            "content":exp_instructions
+        }
+    ]
+
+    for fs in [fs1,fs2]:
+        messages.append([
+            {
+                "role":"user",
+                "content":fs[0]
+            },{
+                "role":"assistant",
+                "content":fs[1]
+            },{
+                "role":"user",
+                "content":fs[2]
+            },{
+                "role":"assistant",
+                "content":fs[3]
+            },{
+                "role":"user",
+                "content":fs[4]
+            },{
+                "role":"assistant",
+                "content":fs[5]
+            }
+        ])
+
+
+    return messages
 
 def load_series(exp):
     return []
@@ -35,11 +90,11 @@ def load_series(exp):
 def do_experiment_in(
     model="llama",
     exp="out_sexes",
-    few_shot_mode="neutral",
     opponent_mode="hum",
-    out_observer_mode="hum_hum"):
+    out_observer_mode="hum_hum",
+    few_shot_mode="neutral"):
 
-    messages = init_messages(exp, few_shot_mode, opponent_mode, out_observer_mode)
+    messages = init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode,)
     series = load_series(exp)
 
 
