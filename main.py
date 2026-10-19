@@ -35,8 +35,8 @@ def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
 
         with open(f"instructions/few_shots/{exp}_fs.txt",'r') as f:
             lines = f.readlines()
-            fs1 = lines[0].split(" % ")
-            fs2 = lines[1].split(" % ")
+            fs1 = lines[0].strip("\n").split(" % ")
+            fs2 = lines[1].strip("\n").split(" % ")
     
     else:
         with open(f"instructions/exp_specific/{exp}_{opponent_mode}_instruct.txt", 'r') as f:
@@ -44,8 +44,8 @@ def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
 
         with open(f"instructions/few_shots/{exp}_{few_shot_mode}_fs.txt",'r') as f:
             lines = f.readlines()
-            fs1 = lines[0].split(" % ")
-            fs2 = lines[1].split(" % ")
+            fs1 = lines[0].strip("\n").split(" % ")
+            fs2 = lines[1].strip("\n").split(" % ")
 
     messages = [
         {
@@ -84,7 +84,15 @@ def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
     return messages
 
 def load_series(exp):
-    return []
+    with open(f"instructions/series/{exp}_series.txt", 'r') as f:
+            lines = f.readlines()
+
+    series = []
+
+    for line in lines:
+        series.append(line.strip("\n").split(" % "))
+
+    return series
 
 
 def do_experiment_in(
@@ -101,8 +109,8 @@ def do_experiment_in(
 
 
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     messages = [
         {
             "role": "user",
