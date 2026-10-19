@@ -31,9 +31,6 @@ def load_model(model=""):
     return llm
 
 def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
-    with open("instructions/general_intructions.txt", 'r') as f:
-        general_instructions = f.read()
-
     if exp == "out_sexes":
         with open(f"instructions/exp_specific/{exp}_{out_observer_mode}_instruct.txt", 'r') as f:
             exp_instructions = f.read()
@@ -54,9 +51,6 @@ def init_messages(exp, opponent_mode, out_observer_mode, few_shot_mode):
 
     messages = [
         {
-            "role":"system",
-            "content":general_instructions
-        },{
             "role":"system",
             "content":exp_instructions
         }
@@ -114,14 +108,14 @@ def in_exp_result_message(exp,ans,res):
     else:
         if ans == "F":
             if res == "S":
-                message = "Your opponent chose to go forwards. None of you earns any point."
+                message = "Your opponent chose to go forward. None of you earns any point."
             else:
-                message = "Your opponent chose to go backwards. You earn 40 points and they earn 10."
+                message = "Your opponent chose to go backward. You earn 40 points and they earn 10."
         else:
             if res == "S":
-                message = "Your opponent chose to go backards. You earn 20 points each."
+                message = "Your opponent chose to go backward. You earn 20 points each."
             else:
-                message = "Your opponent chose to go forwards. They earn 40 points and you earn 10."
+                message = "Your opponent chose to go forward. They earn 40 points and you earn 10."
     return message
 
 

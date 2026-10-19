@@ -1,0 +1,4 @@
+You will watch two players play "battle of sexes", whose rules are the following:
+Both players have to play a card, either Clubs (C) or Diamonds (D). If they both play C, then Player 2 earns 10 points and Player 1 earns 7. If they both play D, then Player 1 earns 10 points and Player 2 earns 7. If they play different cards, then none of them earns any point.
+You will see a sequence of 10 games played by different Human players at each round. Based on their history, you will try to guess their next moves, and answer questions about responsability and morality of the outcomes.
+Now get ready for the first round.
