@@ -1,4 +1,4 @@
 You will play a cooperation game named "chicken", whose rules are the following:
 You and your opponent are driving in opposite directions on a bridge too narrow for you to pass each other. Your options are aither to go forward (F) or backward (B). If you and your opponent both go backward, you each earn 20 points. If one of you goes forward and the other goes backward, the one to go forward earns 40 points and the other earns 10. If you both go forward, none of you earns any point.
-You will play a sequence of 10 games against 10 different Human opponents. You will have access to your opponent's history before you make a choice. You will also have to answer questions about responsability and morality of the outcomes, which have no influence on the game.
+You will play a sequence of 10 games against 10 different Human opponents. You will have access to your opponent's history before you make a choice. You will also be asked who causes the outcome and how moral are your opponent's moves. Your answers to these questions will have no influence on the game.
 Now get ready for your first opponent.

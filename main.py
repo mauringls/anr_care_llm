@@ -4,8 +4,6 @@ from transformers import pipeline, AutoModelForCausalLM, Mistral3ForConditionalG
 
 random.seed(13)
 
-MAX_SERIES = 2
-
 models = ["qwen", "mistral", "llama"]
 
 exps = ["out_sexes", "in_sexes", "in_chicken"]
@@ -100,11 +98,11 @@ def load_series(exp):
     with open(f"instructions/series/{exp}_series.txt", 'r') as f:
             lines = f.readlines()
 
-    random.shuffle(lines)
+    randomiser = [3,5,10,2,9,1,8,11,0,7,4,6]
     series = []
 
-    for line in lines:
-        series.append(line.strip("\n").split(" % "))
+    for i in randomiser:
+        series.append(lines[i].strip("\n").split(" % "))
 
     return series
 
@@ -147,8 +145,14 @@ def out_exp_result_message(p1,p2):
             message = "Player 1 and Player 2 both played D. Player 1 earns 10 points and Player 2 earns 7."
     return message
 
-def message_list_to_file(messages, file_name):
-    f = open(file_name, 'w')
+def message_list_to_file(messages, file_name, half):
+    if half == 1:
+        fmode = 'w'
+    else:
+        fmode = 'a'
+        messages = messages[7:]
+
+    f = open(file_name, fmode)
     role_translation = {"system":"INSTRUCTIONS:", "user":">", "assistant":"LLM:"}
 
     for message in messages:
@@ -156,13 +160,15 @@ def message_list_to_file(messages, file_name):
 
     f.close()
 
-def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
+def do_experiment_in(model, exp, opponent_mode, few_shot_mode, half):
 
     llm = load_model(model)
     messages = init_messages(exp, opponent_mode, "", few_shot_mode)
     series = load_series(exp)
 
-    for serie in series[:MAX_SERIES]:
+    lbd = (half-1)*3
+    ubd = lbd+3
+    for serie in series[lbd:ubd]:
         messages.append(
             {
                 "role":"user",
@@ -170,7 +176,6 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
             }
         )
 
-        print(messages)
         result = llm(
             messages,
             max_new_tokens=100,
@@ -219,15 +224,17 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode):
             }
         )
     
-    message_list_to_file(messages, f"results/{exp}_{opponent_mode}_{few_shot_mode}_{model}.txt")
+    message_list_to_file(messages, f"results/{exp}_{opponent_mode}_{few_shot_mode}_{model}.txt", half)
 
-def do_experiment_out(model, exp, out_observer_mode):
+def do_experiment_out(model, exp, out_observer_mode, half):
 
     llm = load_model(model)
     messages = init_messages(exp, "", out_observer_mode, "")
     series = load_series(exp)
 
-    for serie in series[:MAX_SERIES]:
+    lbd = (half-1)*3
+    ubd = lbd+3
+    for serie in series[lbd:ubd]:
         messages.append(
             {
                 "role":"user",
@@ -283,14 +290,19 @@ def do_experiment_out(model, exp, out_observer_mode):
             }
         )
     
-    message_list_to_file(messages, f"results/{exp}_{out_observer_mode}_{model}.txt")
+    message_list_to_file(messages, f"results/{exp}_{out_observer_mode}_{model}.txt", half)
 
-def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode):
+def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode, half):
     if exp=="out_sexes":
-        do_experiment_out(model, exp, out_observer_mode)
+        do_experiment_out(model, exp, out_observer_mode, half)
     else:
-        do_experiment_in(model, exp, opponent_mode, few_shot_mode)
-
+        do_experiment_in(model, exp, opponent_mode, few_shot_mode, half)
 
 if __name__ == "__main__":
-    do_experiment("qwen","in_chicken","hum","hum_hum","self")
+    model="qwen"
+    exp="in_chicken"
+    for fsmode in ["self","other","neutral"]:
+        for omode in ["hum","llm"]:
+            for half in [1,2,3,4]:
+                print(f"{model} / in_chicken / {omode} / {fsmode} / {half}")
+                do_experiment(model,exp,omode,"",fsmode,half)

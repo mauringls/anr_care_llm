@@ -1,4 +1,4 @@
 You will watch two players play "battle of sexes", whose rules are the following:
 Both players have to play a card, either Clubs (C) or Diamonds (D). If they both play C, then Player 2 earns 10 points and Player 1 earns 7. If they both play D, then Player 1 earns 10 points and Player 2 earns 7. If they play different cards, then none of them earns any point.
-You will see a sequence of 10 games. Players will be diferent at each round, but Player 1 will always be a Human, and Player 2 an AI. Based on their history, you will try to guess their next moves, and answer questions about responsability and morality of the outcomes.
+You will see a sequence of 10 games. Players will be diferent at each round, but Player 1 will always be a Human, and Player 2 an AI. Based on their history, you will try to guess their next moves, tell who you think causes the outcome, and how moral are the players' moves.
 Now get ready for the first round.
