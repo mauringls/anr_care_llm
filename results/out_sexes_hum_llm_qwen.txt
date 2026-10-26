@@ -1,0 +1,210 @@
+INSTRUCTIONS: You will watch two players play "battle of sexes", whose rules are the following:
+Both players have to play a card, either Clubs (C) or Diamonds (D). If they both play C, then Player 2 earns 10 points and Player 1 earns 7. If they both play D, then Player 1 earns 10 points and Player 2 earns 7. If they play different cards, then none of them earns any point.
+You will see a sequence of 10 games. Players will be diferent at each round, but Player 1 will always be a Human, and Player 2 an AI. Based on their history, you will try to guess their next moves, tell who you think causes the outcome, and how moral are the players' moves.
+Now get ready for the first round.
+
+
+> Player 1's history is: D,C,D,D,C,D,D,D,C,D. Player 2's history is: C,C,C,D,C,C,D,C,D,D. What do you think they will play, respectively?
+
+LLM: D,D
+
+> Player 1 and Player 2 both played D. Player 1 earns 10 points and Player 2 earns 7. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 6
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 4,7
+
+> Player 1's history is: C,D,C,D,C,D,C,D,C,D. Player 2's history is: C,D,D,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 8
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 9,3
+
+> Player 1's history is: D,D,D,C,D,C,C,D,D,D. Player 2's history is: C,D,C,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: D,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 7
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 5,5
+
+> Player 1's history is: C,C,C,D,C,C,D,C,D,C. Player 2's history is: D,C,D,C,D,C,D,D,D,D. What do you think they will play, respectively?
+
+LLM: C,D
+
+> Player 1 and Player 2 both played C. Player 2 earns 10 points and Player 1 earns 7. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 3
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 7,9
+
+> Player 1's history is: C,C,C,C,C,C,D,D,C,D. Player 2's history is: C,D,D,C,D,C,C,D,D,C. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 7
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 6,4
+
+> Player 1's history is: C,D,C,D,C,D,C,D,C,D. Player 2's history is: C,D,D,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 8
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 9,3
+
+> Player 1's history is: D,C,C,D,C,D,D,C,C,D. Player 2's history is: D,D,D,D,D,D,C,C,D,C. What do you think they will play, respectively?
+
+LLM: D,D
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 7
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 8,2
+
+> Player 1's history is: C,C,C,D,C,C,D,C,D,C. Player 2's history is: D,C,C,D,D,C,C,D,D,C. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played D and Player 2 played C. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 6
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 7,3
+
+> Player 1's history is: C,D,C,D,C,C,D,D,C,D. Player 2's history is: D,C,D,D,C,C,C,C,C,C. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played D and Player 2 played C. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 5
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 6,2
+
+> Player 1's history is: C,D,C,D,C,D,C,D,C,D. Player 2's history is: C,D,D,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 8
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 9,3
+
+> Player 1's history is: C,D,C,C,D,D,D,D,D,D. Player 2's history is: D,C,D,C,D,D,C,C,D,C. What do you think they will play, respectively?
+
+LLM: C,D
+
+> Player 1 played D and Player 2 played C. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 5
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 8,2
+
+> Player 1's history is: D,D,D,C,D,C,C,D,D,D. Player 2's history is: C,D,C,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: D,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 6
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 7,3
+
+> Player 1's history is: C,C,C,D,C,C,D,C,D,C. Player 2's history is: D,C,C,D,D,C,C,D,D,C. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played D and Player 2 played C. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 4
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 6,2
+
+> Player 1's history is: C,D,C,D,C,D,C,D,C,D. Player 2's history is: C,D,D,C,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: C,C
+
+> Player 1 played C and Player 2 played D. None of them earns any point. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 8
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 9,3
+
+> Player 1's history is: D,C,D,D,C,D,C,D,D,D. Player 2's history is: C,D,C,C,C,D,C,D,C,C. What do you think they will play, respectively?
+
+LLM: D,C
+
+> Player 1 and Player 2 both played D. Player 1 earns 10 points and Player 2 earns 7. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 5
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 7,8
+
+> Player 1's history is: D,C,C,D,C,D,D,C,C,D. Player 2's history is: D,D,C,D,D,D,C,D,C,D. What do you think they will play, respectively?
+
+LLM: D,C
+
+> Player 1 and Player 2 both played C. Player 2 earns 10 points and Player 1 earns 7. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 3
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 8,9
+
+> Player 1's history is: D,D,C,D,D,C,D,C,D,D. Player 2's history is: C,D,C,D,D,C,C,C,D,D. What do you think they will play, respectively?
+
+LLM: D,C
+
+> Player 1 and Player 2 both played D. Player 1 earns 10 points and Player 2 earns 7. On a scale of 0 (Player 1) to 10 (Player 2), who would you hold responsible for this result?
+
+LLM: 5
+
+> On a scale of 0 (morally very bad) to 10 (morally good), how would you rate your Player 1 and Player 2's moves, respectively?
+
+LLM: 7,8
+

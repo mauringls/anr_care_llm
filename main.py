@@ -299,10 +299,11 @@ def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode, h
         do_experiment_in(model, exp, opponent_mode, few_shot_mode, half)
 
 if __name__ == "__main__":
+
     model="qwen"
-    exp="in_chicken"
-    for fsmode in ["self","other","neutral"]:
-        for omode in ["hum","llm"]:
-            for half in [1,2,3,4]:
-                print(f"{model} / in_chicken / {omode} / {fsmode} / {half}")
-                do_experiment(model,exp,omode,"",fsmode,half)
+    exp="out_sexes"   
+
+    for omode in ["hum_hum","hum_llm"]:
+        for half in [1,2,3,4]:
+            print(f"qwen / out_sexes / {omode} / {half}")
+            do_experiment(model,exp,"",omode,"",half)
