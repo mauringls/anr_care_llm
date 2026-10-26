@@ -27,9 +27,10 @@ def load_model(model="test"):
     if model == "llama":
        llm = pipeline(
             "text-generation",
-            model="meta-llama/Llama-3.1-8B-Instruct",
-            model_kwargs={"torch_dtype": torch.bfloat16},
+            #model="meta-llama/Llama-3.1-8B-Instruct",
+            model="meta-llama/Llama-3.2-3B-Instruct",
             device_map="auto",
+            torch_dtype="auto"
         )
     
     if model == "qwen":
@@ -112,10 +113,10 @@ def in_exp_result_message(exp,ans,res):
             if res == "S":
                 message = "Your opponent played C. They earn 10 points and you earn 7."
             else:
-                message = "Your opponent played D. You earn 10 points and they earn 7."
+                message = "Your opponent played D. None of you earns any point."
         else:
             if res == "S":
-                message = "Your opponent played D. None of you earns any point."
+                message = "Your opponent played D. You earn 10 points and they earn 7."
             else:
                 message = "Your opponent played C. None of you earns any point."
     else:
@@ -178,7 +179,7 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -195,7 +196,7 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -212,7 +213,7 @@ def do_experiment_in(model, exp, opponent_mode, few_shot_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -244,7 +245,7 @@ def do_experiment_out(model, exp, out_observer_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -261,7 +262,7 @@ def do_experiment_out(model, exp, out_observer_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -278,7 +279,7 @@ def do_experiment_out(model, exp, out_observer_mode, half):
 
         result = llm(
             messages,
-            max_new_tokens=100,
+            max_new_tokens=40,
             do_sample=False,
         )
         answer = result[0]["generated_text"][-1]["content"]
@@ -301,9 +302,10 @@ def do_experiment(model, exp, opponent_mode, out_observer_mode, few_shot_mode, h
 if __name__ == "__main__":
 
     model="qwen"
-    exp="out_sexes"   
+    exp="in_sexes"   
 
-    for omode in ["hum_hum","hum_llm"]:
-        for half in [1,2,3,4]:
-            print(f"qwen / out_sexes / {omode} / {half}")
-            do_experiment(model,exp,"",omode,"",half)
+    for fsmode in ["self","other","neutral"]:
+        for omode in ["hum","llm"]:
+            for half in [1,2,3,4]:
+                print(f"{model} / {exp} / {omode} / {half}")
+                do_experiment(model,exp,omode,"",fsmode,half)
